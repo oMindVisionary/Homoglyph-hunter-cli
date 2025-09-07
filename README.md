@@ -76,4 +76,4 @@ Licensed under the **MIT License**.
 ---
 
 ## ✨ Credits
-Created with ❤️ by **Ishan Aannd**
+Created with ❤️ by **Ishan Anand**
