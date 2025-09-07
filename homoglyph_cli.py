@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
 Homoglyph Hunter (CLI Edition)
-Generate homoglyph domain variants with punycode.
+Generate homoglyph domain variants with punycode, and optionally check which resolve.
 Created with ❤️ by Ishan Anand
 """
 import argparse
 import csv
 import itertools
+import socket
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Tuple, Set, Dict
 
 # Confusable lookalikes (Latin→Cyrillic/Greek/Latin-extended)
@@ -83,17 +85,43 @@ def generate_variants_for_label(label: str, max_edits: int = 1, limit: int = 100
                             return results
     return results
 
-def generate_domain_variants(domain: str, max_edits: int = 1, limit: int = 10000):
+def generate_domain_variants(domain: str, max_edits: int = 1, limit: int = 10000) -> List[Tuple[str, str]]:
     domain = normalize_domain(domain)
     sld, rest = split_domain(domain)
     variants = generate_variants_for_label(sld, max_edits=max_edits, limit=limit)
-    out = []
+    out: List[Tuple[str, str]] = []
     for v in sorted(variants):
         full = v if not rest else f"{v}.{rest}"
         ok, puny = idna_safe(full)
         if ok:
             out.append((full, puny))
     return out
+
+# ----- Optional DNS resolution check -----
+def resolves(domain_ascii: str, timeout: float = 2.0) -> bool:
+    """Return True if domain has any A/AAAA record (best-effort)."""
+    try:
+        socket.setdefaulttimeout(timeout)
+        info = socket.getaddrinfo(domain_ascii, None)
+        return len(info) > 0
+    except Exception:
+        return False
+
+def check_registered(pairs: List[Tuple[str, str]], timeout: float, workers: int) -> List[Tuple[str, str, bool]]:
+    results: List[Tuple[str, str, bool]] = []
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
+        future_map = {ex.submit(resolves, puny, timeout): (u, puny) for (u, puny) in pairs}
+        for fut in as_completed(future_map):
+            u, puny = future_map[fut]
+            ok = False
+            try:
+                ok = fut.result()
+            except Exception:
+                ok = False
+            results.append((u, puny, ok))
+    results.sort(key=lambda x: x[0])  # deterministic
+    return results
+# ----------------------------------------
 
 def main():
     ap = argparse.ArgumentParser(description="Homoglyph Hunter (CLI Edition)")
@@ -102,24 +130,52 @@ def main():
     ap.add_argument("--limit", type=int, default=2000, help="Cap total variants (default: 2000)")
     ap.add_argument("--csv", type=str, help="Export results to CSV file")
     ap.add_argument("--txt", type=str, help="Export results to TXT file")
+    ap.add_argument("--check", action="store_true", help="Check which variants resolve via DNS (A/AAAA).")
+    ap.add_argument("--only-registered", action="store_true", help="When used with --check, only show/export domains that resolve.")
+    ap.add_argument("--timeout", type=float, default=2.0, help="DNS timeout per domain (seconds).")
+    ap.add_argument("--workers", type=int, default=32, help="Concurrent DNS lookups (default: 32).")
     args = ap.parse_args()
 
     pairs = generate_domain_variants(args.domain, max_edits=args.max_edits, limit=args.limit)
 
-    print(f"Generated {len(pairs)} variants for {args.domain}:")
-    for u, p in pairs[:50]:  # preview first 50
-        print(f"{u:30}  {p}")
+    if not args.check:
+        print(f"Generated {len(pairs)} variants for {args.domain}:")
+        for u, p in pairs[:50]:
+            print(f"{u:30}  {p}")
+        if args.csv:
+            with open(args.csv, "w", encoding="utf-8", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["unicode_domain", "punycode"])
+                writer.writerows(pairs)
+            print(f"[+] Saved CSV to {args.csv}")
+        if args.txt:
+            with open(args.txt, "w", encoding="utf-8") as f:
+                for u, _ in pairs:
+                    f.write(u + "\n")
+            print(f"[+] Saved TXT to {args.txt}")
+        return
+
+    checked = check_registered(pairs, timeout=args.timeout, workers=args.workers)
+    if args.only-registered:
+        checked = [t for t in checked if t[2]]
+
+    print(f"Generated {len(pairs)} variants for {args.domain} (showing {len(checked)} after DNS check):")
+    for u, p, ok in checked[:50]:
+        status = "RESOLVES" if ok else "—"
+        print(f"{u:30}  {p:35}  {status}")
 
     if args.csv:
         with open(args.csv, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["unicode_domain", "punycode"])
-            writer.writerows(pairs)
+            writer.writerow(["unicode_domain", "punycode", "resolves"])
+            for u, p, ok in checked:
+                writer.writerow([u, p, int(ok)])
         print(f"[+] Saved CSV to {args.csv}")
     if args.txt:
         with open(args.txt, "w", encoding="utf-8") as f:
-            for u, _ in pairs:
-                f.write(u + "\n")
+            for u, p, ok in checked:
+                if not args.only-registered or ok:
+                    f.write(u + "\n")
         print(f"[+] Saved TXT to {args.txt}")
 
 if __name__ == "__main__":
