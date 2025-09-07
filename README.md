@@ -16,7 +16,7 @@
 
 ### 1️⃣ Clone the repo
 ```bash
-git clone https://github.com/<your-username>/homoglyph-hunter-cli.git
+git clone https://github.com/ishananand07/Homoglyph-hunter-cli.git
 cd homoglyph-hunter-cli
 ```
 
