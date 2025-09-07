@@ -108,6 +108,7 @@ def resolves(domain_ascii: str, timeout: float = 2.0) -> bool:
         return False
 
 def check_registered(pairs: List[Tuple[str, str]], timeout: float, workers: int) -> List[Tuple[str, str, bool]]:
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     results: List[Tuple[str, str, bool]] = []
     with ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
         future_map = {ex.submit(resolves, puny, timeout): (u, puny) for (u, puny) in pairs}
@@ -131,7 +132,8 @@ def main():
     ap.add_argument("--csv", type=str, help="Export results to CSV file")
     ap.add_argument("--txt", type=str, help="Export results to TXT file")
     ap.add_argument("--check", action="store_true", help="Check which variants resolve via DNS (A/AAAA).")
-    ap.add_argument("--only-registered", action="store_true", help="When used with --check, only show/export domains that resolve.")
+    ap.add_argument("--only-registered", dest="only_registered", action="store_true",
+                    help="When used with --check, only show/export domains that resolve.")
     ap.add_argument("--timeout", type=float, default=2.0, help="DNS timeout per domain (seconds).")
     ap.add_argument("--workers", type=int, default=32, help="Concurrent DNS lookups (default: 32).")
     args = ap.parse_args()
@@ -157,7 +159,7 @@ def main():
 
     checked = check_registered(pairs, timeout=args.timeout, workers=args.workers)
     if args.only_registered:
-    checked = [t for t in checked if t[2]]
+        checked = [t for t in checked if t[2]]
 
     print(f"Generated {len(pairs)} variants for {args.domain} (showing {len(checked)} after DNS check):")
     for u, p, ok in checked[:50]:
@@ -174,7 +176,7 @@ def main():
     if args.txt:
         with open(args.txt, "w", encoding="utf-8") as f:
             for u, p, ok in checked:
-                if not args.only-registered or ok:
+                if not args.only_registered or ok:
                     f.write(u + "\n")
         print(f"[+] Saved TXT to {args.txt}")
 
