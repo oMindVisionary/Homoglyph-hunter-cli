@@ -2,7 +2,7 @@
 """
 Homoglyph Hunter (CLI Edition)
 Generate homoglyph domain variants with punycode.
-Created with ❤️ by Ishan Aannd
+Created with ❤️ by Ishan Anand
 """
 import argparse
 import csv
