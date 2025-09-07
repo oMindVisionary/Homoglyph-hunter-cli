@@ -156,8 +156,8 @@ def main():
         return
 
     checked = check_registered(pairs, timeout=args.timeout, workers=args.workers)
-    if args.only-registered:
-        checked = [t for t in checked if t[2]]
+    if args.only_registered:
+    checked = [t for t in checked if t[2]]
 
     print(f"Generated {len(pairs)} variants for {args.domain} (showing {len(checked)} after DNS check):")
     for u, p, ok in checked[:50]:
