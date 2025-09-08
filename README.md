@@ -20,6 +20,12 @@
 
 ## 📦 Installation
 
+### 1) Clone the repo
+```bash
+git clone https://github.com/<your-username>/homoglyph-hunter-cli.git
+cd homoglyph-hunter-cli
+```
+
 **Recommended: use a virtual environment**
 
 macOS / Linux:
@@ -31,10 +37,10 @@ source .venv/bin/activate
 Windows (PowerShell):
 ```powershell
 python -m venv .venv
-.\venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
-Clone or download the repo and you’re ready — no extra installs needed for generation/DNS.
+> Alternatively, download the repo as a ZIP from GitHub and extract it, then continue with the steps above.
 
 ### Optional (for richer WHOIS support)
 - **macOS (Homebrew):**
